@@ -10,7 +10,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 LANG=en_US.UTF-8
 
-Btapi_Url='http://www.example.com'
+Btapi_Url='https://bt11n.bthappy.com'
 
 is64bit=$(getconf LONG_BIT)
 if [ "${is64bit}" != '64' ];then
@@ -49,7 +49,7 @@ GetSysInfo(){
 	echo -e ${SYS_VERSION}
 	echo -e Bit:${SYS_BIT} Mem:${MEM_TOTAL}M Core:${CPU_INFO}
 	echo -e ${SYS_INFO}
-	echo -e "请截图以上报错信息发帖至论坛www.bt.cn/bbs求助"
+	echo -e "请截图以上报错信息发帖至 https://qun.bthappy.com 求助"
 
 }
 
@@ -63,7 +63,7 @@ Red_Error(){
 
 monitor_path="/www/server/bt-monitor"
 run_bin="/www/server/bt-monitor/BT-MONITOR"
-if [ ! -d "/www/server" ];then 
+if [ ! -d "/www/server" ];then
     mkdir -p /www/server
 fi
 old_dir="/www/server/old_btmonitor"
@@ -88,12 +88,12 @@ get_node_url(){
 		echo '---------------------------------------------';
 		return
 	fi
-	
+
 	echo '---------------------------------------------';
 	echo "Selected download node...";
 	# nodes=(http://dg2.bt.cn http://dg1.bt.cn http://125.90.93.52:5880 http://36.133.1.8:5880 http://123.129.198.197 http://38.34.185.130 http://116.213.43.206:5880 http://128.1.164.196);
 	#nodes=(http://dg2.bt.cn http://dg1.bt.cn http://125.90.93.52:5880 http://36.133.1.8:5880 http://123.129.198.197 http://116.213.43.206:5880 http://128.1.164.196);
-	nodes=(https://dg2.bt.cn https://dg1.bt.cn https://download.bt.cn);
+	nodes=(https://bt11d1.bthappy.com https://bt11d2.bthappy.com https://bt11d3.bthappy.com);
 	tmp_file1=/dev/shm/net_test1.pl
 	tmp_file2=/dev/shm/net_test2.pl
 	[ -f "${tmp_file1}" ] && rm -f ${tmp_file1}
@@ -122,7 +122,7 @@ get_node_url(){
 				if [ $RES -ge 3000 ];then
 					break;
 				fi
-			fi	
+			fi
 		fi
 	done
 
@@ -130,7 +130,7 @@ get_node_url(){
 	if [ -z "$NODE_URL" ];then
 		NODE_URL=$(cat $tmp_file2|sort -g -t " " -k 1|head -n 1|awk '{print $2}')
 		if [ -z "$NODE_URL" ];then
-			NODE_URL='https://download.bt.cn';
+			NODE_URL='https://bt11d1.bthappy.com ';
 		fi
 	fi
 	rm -f $tmp_file1
@@ -243,7 +243,7 @@ Install_Python_Lib(){
 	if [ "$is_aarch64" != "" ];then
 		is64bit="aarch64"
 	fi
-	
+
 	if [ -f "/www/server/bt-monitor/pymake.pl" ];then
 		os_version=""
 		rm -f /www/server/bt-monitor/pymake.pl
@@ -278,7 +278,7 @@ Install_Python_Lib(){
 			$pyenv_path/pyenv/bin/pip install simple-websocket==0.10.0
 			if [ ! -f $pyenv_path/pyenv/bin/python ];then
 				rm -f $pyenv_file
-				Red_Error "ERROR: Install python env fielded." "ERROR: 下载堡塔云监控主控端运行环境失败，请尝试重新安装！" 
+				Red_Error "ERROR: Install python env fielded." "ERROR: 下载堡塔云监控主控端运行环境失败，请尝试重新安装！"
 			fi
 			$pyenv_path/pyenv/bin/python3.7 -V
 			if [ $? -eq 0 ];then
@@ -324,7 +324,7 @@ Install_Python_Lib(){
 	chmod -R 700 $pyenv_path/pyenv/bin
 	$pyenv_path/pyenv/bin/pip install -U pip
 	$pyenv_path/pyenv/bin/pip install -U setuptools
-	$pyenv_path/pyenv/bin/pip install -U wheel==0.34.2 
+	$pyenv_path/pyenv/bin/pip install -U wheel==0.34.2
 	$pyenv_path/pyenv/bin/pip install -r $pyenv_path/pyenv/pip.txt
 	$pyenv_path/pyenv/bin/pip install -U flask==2.2.0
 	$pyenv_path/pyenv/bin/pip install flask_sock
@@ -362,7 +362,7 @@ EOF
 		/etc/init.d/btm stop
 		sleep 1
 	fi
-	
+
 	if [ -f "/www/server/bt-monitor/sqlite-server.sh" ]; then
 		chmod +x /www/server/bt-monitor/sqlite-server.sh
 		/www/server/bt-monitor/sqlite-server.sh stop
@@ -429,9 +429,6 @@ EOF
 	fi
 	if [ -f $monitor_path/sqlite_server/PluginLoader.so ]; then
 		rm -f $monitor_path/sqlite_server/PluginLoader.so
-	fi
-	if [ -f $monitor_path/hook_import/PluginLoader.so ]; then
-		rm -f $monitor_path/hook_import/PluginLoader.so
 	fi
 }
 
@@ -556,7 +553,7 @@ Service_Add(){
     else
         if [ "${PM}" == "yum" ] || [ "${PM}" == "dnf" ]; then
             chkconfig --add btm
-            chkconfig --level 2345 btm on            
+            chkconfig --level 2345 btm on
         elif [ "${PM}" == "apt-get" ]; then
             update-rc.d btm defaults
         fi
@@ -579,13 +576,13 @@ Service_Del(){
 
 Get_Ip_Address(){
 	getIpAddress=""
-	getIpAddress=$(curl -sS --connect-timeout 10 -m 60 https://www.bt.cn/Api/getIpAddress)
+	getIpAddress=$(curl -sS --connect-timeout 10 -m 60 https://bt11.bthappy.com/Api/getIpAddress)
 	if [ -z "${getIpAddress}" ] || [ "${getIpAddress}" = "0.0.0.0" ]; then
 		isHosts=$(cat /etc/hosts|grep 'www.bt.cn')
 		if [ -z "${isHosts}" ];then
 			echo "" >> /etc/hosts
 			echo "116.213.43.206 www.bt.cn" >> /etc/hosts
-			getIpAddress=$(curl -sS --connect-timeout 10 -m 60 https://www.bt.cn/Api/getIpAddress)
+			getIpAddress=$(curl -sS --connect-timeout 10 -m 60 https://bt11.bthappy.com/Api/getIpAddress)
 			if [ -z "${getIpAddress}" ];then
 				sed -i "/bt.cn/d" /etc/hosts
 			fi
@@ -671,7 +668,7 @@ Backup_Monitor(){
 		mv ${old_dir} ${old_dir}_$(date +%Y_%m_%d_%H_%M_%S)
 		mkdir -p ${old_dir}
 	fi
-	
+
 	mv ${monitor_path}/data ${old_dir}/data
 	mv ${monitor_path}/config ${old_dir}/config
 	mv ${monitor_path}/ssl ${old_dir}/ssl
@@ -691,7 +688,7 @@ Get_Pack_Manager(){
 	if [ -f "/usr/bin/yum" ] && [ -d "/etc/yum.repos.d" ]; then
 		PM="yum"
 	elif [ -f "/usr/bin/apt-get" ] && [ -f "/usr/bin/dpkg" ]; then
-		PM="apt-get"		
+		PM="apt-get"
 	fi
 }
 
@@ -728,14 +725,14 @@ Check_Sys_Write(){
     if [ ! -d "/etc/init.d" ];then
         mkdir -p /etc/init.d
 	fi
-	
+
     Get_Pack_Manager
     if [ "$PM" == "yum" ]; then
         read_dir="/usr/lib/systemd/system/ /etc/init.d/ /var/spool/cron/"
     else
         read_dir="/usr/lib/systemd/system/ /etc/init.d/ /var/spool/cron/crontabs/"
     fi
-    
+
     touch /tmp/btm_install_test_111.pl
     for dir in ${read_dir[@]}
     do
@@ -762,7 +759,7 @@ Check_Sys_Write(){
 
                 echo ""
                 echo -e "\033[31m解决以上问题后，请尝试重新安装！ \033[0m"
-                echo -e "如果无法解决请截图以上报错信息发帖至论坛www.bt.cn/bbs求助"
+                echo -e "如果无法解决请截图以上报错信息发帖至 https://qun.bthappy.com 求助"
                 exit 1
             else
                 rm -f $dir/btm_install_test_111.pl
@@ -789,7 +786,7 @@ Check_Sys_Packs(){
                 echo -e "2、检查系统源是否可用？尝试更换可用的源参考教程：\n   https://www.bt.cn/bbs/thread-58005-1-1.html "
                 echo ""
                 echo -e "\033[31m解决以上问题后，请尝试重新安装！ \033[0m"
-                echo -e "如果无法解决请截图以上报错信息发帖至论坛www.bt.cn/bbs求助"
+                echo -e "如果无法解决请截图以上报错信息发帖至 https://qun.bthappy.com 求助"
                 exit 1
             fi
         done
@@ -802,7 +799,7 @@ Install_Main(){
 	System_Check
 	Get_Pack_Manager
 	get_node_url
-	
+
 	if [ "$PM" == "yum" ]; then
 		Install_RPM_Pack
 	else
@@ -823,7 +820,7 @@ Install_Main(){
 Uninstall_Monitor(){
 	pkill BT-MONITOR
 	/etc/init.d/btm stop
-	
+
 	if [ -f "/www/server/bt-monitor/sqlite-server.sh" ]; then
 		chmod +x /www/server/bt-monitor/sqlite-server.sh
 		/www/server/bt-monitor/sqlite-server.sh stop
@@ -874,7 +871,7 @@ echo "
 +----------------------------------------------------------------------
 | Bt-Monitor FOR CentOS/Ubuntu/Debian
 +----------------------------------------------------------------------
-| Copyright © 2015-2099 BT-SOFT(https://www.bt.cn) All rights reserved.
+| Copyright © 2015-2099 https://www.BThappy.com All rights reserved.
 +----------------------------------------------------------------------
 | The Monitor URL will be https://SERVER_IP:806 when installed.
 +----------------------------------------------------------------------
