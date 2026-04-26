@@ -114,7 +114,7 @@ GetSysInfo(){
 	echo -e Bit:${SYS_BIT} Mem:${MEM_TOTAL}M Core:${CPU_INFO}
 	echo -e ${SYS_INFO}
 	echo -e "============================================"
-	echo -e "请截图以上报错信息发帖至 https://t.me/XHBWBOT 求助"
+	echo -e "请截图以上报错信息至@XHBWBOT 求助"
 	echo -e "============================================"
 
 	if [ -f "/etc/redhat-release" ];then
