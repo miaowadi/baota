@@ -114,7 +114,7 @@ GetSysInfo(){
 	echo -e Bit:${SYS_BIT} Mem:${MEM_TOTAL}M Core:${CPU_INFO}
 	echo -e ${SYS_INFO}
 	echo -e "============================================"
-	echo -e "请截图以上报错信息发帖至 https://qun.bthappy.com 求助"
+	echo -e "请截图以上报错信息发帖至 https://t.me/XHBWBOT 求助"
 	echo -e "============================================"
 
 	if [ -f "/etc/redhat-release" ];then
@@ -1352,7 +1352,7 @@ echo "
 +----------------------------------------------------------------------
 | Bt-WebPanel FOR CentOS/Ubuntu/Debian
 +----------------------------------------------------------------------
-| Copyright © 2015-2099 https://www.BThappy.com All rights reserved.
+| Copyright © 2015-2099 https://XH.MS All rights reserved.
 +----------------------------------------------------------------------
 | The WebPanel URL will be http://SERVER_IP:${panelPort} when installed.
 +----------------------------------------------------------------------
